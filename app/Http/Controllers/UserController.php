@@ -3,38 +3,47 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
+use App\Http\Requests\UserLoginRequest;
+use App\Http\Requests\UserRegisterRequest;
+use App\Repositories\User\UserRepositoryInterface;
 
 class UserController extends Controller
 {
-    public function index()
+    const SUCCUSUS_STATUS_CODE = 200;
+    const UNAUTHORISED_STATUS_CODE = 401;
+
+    public function __construct(UserRepositoryInterface $userRepository)
     {
-        return User::all();
+        $this->userRepository = $userRepository;
     }
 
-    public function show($id)
+    public function login(UserLoginRequest $request)
     {
-        return User::find($id);
+        $response = $this->userRepository->login($request);
+        return response()->json($response["data"], $response["statusCode"]);
     }
 
-    public function store(Request $request)
+    public function register(UserRegisterRequest $request)
     {
-        return User::create($request->all());
+        $response = $this->userRepository->register($request);
+        return response()->json($response["data"], $response["statusCode"]);
     }
 
-    public function update(Request $request, $id)
+    public function details()
     {
-        $user = User::findOrFail($id);
-        $user->update($request->all());
-
-        return $user;
+        $response = $this->userRepository->details();
+        return response()->json($response["data"], $response["statusCode"]);
     }
 
-    public function delete(Request $request, $id)
+    public function logout(Request $request)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
+        $response = $this->userRepository->logout($request);
+        return response()->json($response["data"], $response["statusCode"]);
+    }
 
-        return 204;
+    public function refreshToken(Request $request)
+    {
+        $response = $this->userRepository->refreshToken($request);
+        return response()->json($response["data"], $response["statusCode"]);
     }
 }
