@@ -27,6 +27,7 @@ class UserRepository implements UserRepositoryInterface
         $password = $request->password;
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
+        $input['profile_id'] = 2;
         User::create($input);
         $response = $this->getTokenAndRefreshToken($email, $password);
         return $this->response($response["data"], $response["statusCode"]);

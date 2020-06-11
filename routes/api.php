@@ -24,13 +24,17 @@ Route::post('login', 'UserController@login');
 Route::post('register', 'UserController@register');
 Route::post('refreshtoken', 'UserController@refreshToken');
 
+Route::get('posts/{order}', 'PostsController@index');
+Route::get('post/{id}', 'PostsController@show');
+Route::post('posts/date', 'PostsController@dateRagePost');
+
+Route::get('importPost', 'ImportController@importPost');
+
 Route::group(['middleware' => ['auth:api']], function () {
     Route::post('logout', 'UserController@logout');
     Route::post('details', 'UserController@details');
 
-    Route::get('posts', 'PostsController@index');
-    Route::get('posts/{post}', 'PostsController@show');
     Route::post('posts', 'PostsController@store');
-    Route::put('posts/{post}', 'PostsController@update');
-    Route::delete('posts/{post}', 'PostsController@delete');
+    // Route::put('posts/{post}', 'PostsController@update');
+    // Route::delete('posts/{post}', 'PostsController@delete');
 });

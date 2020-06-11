@@ -8,21 +8,31 @@ use Illuminate\Http\Request;
 
 class PostsController extends Controller
 {
-    public function index()
+    public function index($order)
     {
-        return Post::all();
+        return Post::with("user")->orderBy('publication_date', $order)->get();
     }
 
-    public function show(Post $post)
+    public function show($idPost)
     {
-        return $post;
+        return empty(Post::find($idPost)) ? [] : Post::with("user")->find($idPost);
     }
 
     public function store(Request $request)
     {
-        $post = Post::create($request->all());
+        $input = $request->all();
+        $user = $request->user();
+        $input['user_id'] = $user->id;
+        $input['publication_date'] = date("Y-m-d H:i:s");
+        $post = Post::create($input);
 
         return response()->json($post, 201);
+    }
+
+    public function dateRagePost(Request $request)
+    {
+        $input = $request->all();
+        return Post::with("user")->whereBetween('publication_date', [$input["start_date"], $input["final_date"]])->get();
     }
 
     public function update(Request $request, Post $post)
