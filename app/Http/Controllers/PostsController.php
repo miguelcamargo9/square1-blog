@@ -48,4 +48,10 @@ class PostsController extends Controller
 
         return response()->json(null, 204);
     }
+
+    public function postByUser(Request $request)
+    {
+        $user = $request->user();
+        return Post::with("user")->where("user_id", $user->id)->get();
+    }
 }
