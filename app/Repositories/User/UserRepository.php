@@ -39,8 +39,10 @@ class UserRepository implements UserRepositoryInterface
         $password = $request->password;
 
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
+            $user = User::where("email", $email)->first();
             $response = $this->getTokenAndRefreshToken($email, $password);
             $data = $response["data"];
+            $data->user = $user;
             $statusCode =  $response["statusCode"];
         } else {
             $data = ['error' => 'Unauthorised'];
