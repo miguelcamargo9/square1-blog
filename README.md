@@ -2,7 +2,7 @@
 
 ### Installation
 
-1. Create de data base 'square_blog'
+1. Create the data base 'square_blog'
 
 2. Install the dependencies, the composer script is configure to run the migrate database.
 
